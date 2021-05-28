@@ -104,7 +104,7 @@ class ExpressListEndPoints {
     let parsedRegexp = expressPathRegexp;
     let paramIdx = 0;
 
-    while (hasParams(parsedRegexp)) {
+    while (this._hasParams(parsedRegexp)) {
       const paramId = ":" + params[paramIdx].name;
 
       parsedRegexp = parsedRegexp
