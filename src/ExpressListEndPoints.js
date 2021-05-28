@@ -192,7 +192,6 @@ class ExpressListEndPoints {
               basePath: `${basePath}/${parsedPath}`,
               endpoints,
               parentMiddleware: middleware,
-              options,
             });
           } else if (
             !stackItem.path &&
@@ -206,7 +205,6 @@ class ExpressListEndPoints {
               basePath: `${basePath}/${regEcpPath}`,
               endpoints,
               parentMiddleware: middleware,
-              options,
             });
           } else {
             this._parseEndpoints({
@@ -214,7 +212,6 @@ class ExpressListEndPoints {
               basePath,
               endpoints,
               parentMiddleware: middleware,
-              options,
             });
           }
         } else if (this.options.showParentMiddleware) {
