@@ -56,20 +56,26 @@ class ExpressListEndPoints {
     return methods;
   }
 
-  _getMiddlewareName(middleware) {
+  _getMiddlewareMeta(middleware) {
     let name = middleware.handle.name;
 
     if (!name && !this.options.hideAnonymousMiddleware) {
       name = "anonymous";
     }
 
+    const ret = { name };
     let { params } = middleware.handle;
-    if (Array.isArray(params) && params.length > 0) {
-      params = params.map((v) => JSON.stringify(v));
-      name = `${name}(${params.join(", ")})`;
+
+    if (params) {
+      ret.params = params;
     }
 
-    return name;
+    // if (Array.isArray(params) && params.length > 0) {
+    //   params = params.map((v) => JSON.stringify(v));
+    //   name = `${name}(${params.join(", ")})`;
+    // }
+
+    return ret;
   }
 
   /**
@@ -78,8 +84,10 @@ class ExpressListEndPoints {
    */
   _getRouteMiddleware(route) {
     return route.stack
-      .map((item) => this._getMiddlewareName(item))
-      .filter((v) => !!v && !this.options.excludeMiddleware.has(v));
+      .map((item) => this._getMiddlewareMeta(item))
+      .filter(
+        ({ name }) => !!name && !this.options.excludeMiddleware.has(name)
+      );
   }
 
   /**
@@ -236,10 +244,11 @@ class ExpressListEndPoints {
             });
           }
         } else if (this.options.showParentMiddleware) {
-          const name = this._getMiddlewareName(stackItem);
+          const meta = this._getMiddlewareMeta(stackItem);
 
+          const { name } = meta;
           if (name && !this.options.excludeMiddleware.has(name)) {
-            middleware.push(name);
+            middleware.push(meta);
           }
         }
       });
