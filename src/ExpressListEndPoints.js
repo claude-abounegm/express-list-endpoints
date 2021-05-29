@@ -63,8 +63,10 @@ class ExpressListEndPoints {
       name = "anonymous";
     }
 
-    if (Array.isArray(middleware.handle.params)) {
-      name = `${name}(${middleware.handle.params.join(", ")})`;
+    let { params } = middleware.handle;
+    if (Array.isArray(params)) {
+      params = params.map((v) => JSON.stringify(v));
+      name = `${name}(${params.join(", ")})`;
     }
 
     return name;
