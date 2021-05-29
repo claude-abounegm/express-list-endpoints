@@ -7,20 +7,35 @@ const STACK_ITEM_VALID_NAMES = ["router", "bound dispatch", "mounted_app"];
 class ExpressListEndPoints {
   options = {
     showParentMiddleware: false,
+    hideAnonymousMiddleware: false,
     showAllRoutes: false,
-    showAnonymous: true,
+    excludeMiddleware: new Set(),
   };
 
   /**
    *
-   * @param {{ showParentMiddleware?: boolean; showAllRoutes?: boolean; showAnonymous?: boolean }} options
+   * @param {{
+   *  showParentMiddleware?: boolean;
+   *  hideAnonymousMiddleware?: boolean;
+   *  showAllRoutes?: boolean;
+   *  excludeMiddleware?: String[]
+   * }} options
    */
   constructor(options) {
     if (typeof options === "object") {
-      this.options = {
+      options = {
         ...this.options,
         ...options,
       };
+
+      let { excludeMiddleware } = options;
+      excludeMiddleware = new Set(
+        Array.isArray(excludeMiddleware) ? excludeMiddleware : []
+      );
+
+      options.excludeMiddleware = excludeMiddleware;
+
+      this.options = options;
     }
   }
 
@@ -44,7 +59,7 @@ class ExpressListEndPoints {
   _getMiddlewareName(middleware) {
     let name = middleware.handle.name;
 
-    if (!name && this.options.showAnonymous) {
+    if (!name && !this.options.hideAnonymousMiddleware) {
       name = "anonymous";
     }
 
@@ -58,7 +73,7 @@ class ExpressListEndPoints {
   _getRouteMiddleware(route) {
     return route.stack
       .map((item) => this._getMiddlewareName(item))
-      .filter((v) => !!v);
+      .filter((v) => !!v && !this.options.excludeMiddleware.has(v));
   }
 
   /**
@@ -217,7 +232,7 @@ class ExpressListEndPoints {
         } else if (this.options.showParentMiddleware) {
           const name = this._getMiddlewareName(stackItem);
 
-          if (name) {
+          if (name && !this.options.excludeMiddleware.has(name)) {
             middleware.push(name);
           }
         }
