@@ -1,7 +1,7 @@
 /* eslint-env mocha */
 const mocha = require('mocha')
 const chai = require('chai')
-const listEndpoints = require('../src/index')
+const { listEndpoints } = require('../src/index')
 const express = require('express')
 
 const before = mocha.before

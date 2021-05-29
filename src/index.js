@@ -5,10 +5,18 @@ const ExpressListEndPoints = require("./ExpressListEndPoints");
  * @param {Object} app the express/route instance to get the endpoints from
  * @param {{ showParentMiddleware?: boolean }} options
  */
-function getEndpoints(app, options = {}) {
+function listEndpoints(app, options = {}) {
   const endpoints = new ExpressListEndPoints(options);
 
   return endpoints.getEndpoints(app);
 }
 
-module.exports = getEndpoints;
+function wrap(fn) {
+  return function (...params) {
+    fn.params = params;
+
+    return fn;
+  };
+}
+
+module.exports = { listEndpoints, wrap, ExpressListEndPoints };

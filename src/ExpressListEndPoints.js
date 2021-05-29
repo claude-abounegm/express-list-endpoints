@@ -63,6 +63,10 @@ class ExpressListEndPoints {
       name = "anonymous";
     }
 
+    if (Array.isArray(middleware.handle.params)) {
+      name = `${name}(${middleware.handle.params.join(", ")})`;
+    }
+
     return name;
   }
 
