@@ -12,11 +12,21 @@ function listEndpoints(app, options = {}) {
 }
 
 function wrap(fn) {
-  return function (...params) {
-    fn.params = params;
+  if (typeof fn !== "function") {
+    throw new Error("fn needs to be a function");
+  }
 
-    return fn;
-  };
+  return {
+    [fn.name](...args) {
+      const ret = fn(...args);
+
+      if (typeof ret === "function") {
+        ret.params = args;
+      }
+
+      return ret;
+    },
+  }[fn.name];
 }
 
 module.exports = { listEndpoints, wrap, ExpressListEndPoints };
