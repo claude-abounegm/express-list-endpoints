@@ -261,7 +261,7 @@ class ExpressListEndPoints {
    * Returns an array of strings with all the detected endpoints
    * @param {Object} app the express/route instance to get the endpoints from
    */
-  getEndpoints(app) {
+  listEndpoints(app) {
     const endpoints = this._parseEndpoints({ app });
 
     return endpoints;

@@ -8,7 +8,7 @@ const ExpressListEndPoints = require("./ExpressListEndPoints");
 function listEndpoints(app, options = {}) {
   const endpoints = new ExpressListEndPoints(options);
 
-  return endpoints.getEndpoints(app);
+  return endpoints.listEndpoints(app);
 }
 
 function wrap(fn) {
