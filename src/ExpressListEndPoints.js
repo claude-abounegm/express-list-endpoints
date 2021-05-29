@@ -64,7 +64,7 @@ class ExpressListEndPoints {
     }
 
     let { params } = middleware.handle;
-    if (Array.isArray(params)) {
+    if (Array.isArray(params) && params.length > 0) {
       params = params.map((v) => JSON.stringify(v));
       name = `${name}(${params.join(", ")})`;
     }
